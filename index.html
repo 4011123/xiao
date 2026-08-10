@@ -136,6 +136,7 @@
             transform: scale(0.94);
         }
 
+        /* ===== 手机虚拟键盘（上下左右 + 暂停） ===== */
         .touch-controls {
             display: none;
             flex-shrink: 0;
@@ -158,7 +159,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             color: #b0c8ee;
-            font-size: clamp(16px, 2.5vh, 26px);
+            font-size: clamp(18px, 2.8vh, 28px);
             font-weight: 700;
             font-family: 'Courier New', monospace;
             text-align: center;
@@ -176,16 +177,16 @@
             transform: scale(0.92);
             color: #00f5c8;
         }
-        .touch-key.space-key {
-            flex: 2;
-            max-width: 120px;
+        .touch-key.pause-key {
+            flex: 1.5;
+            max-width: 90px;
             background: rgba(255, 200, 0, 0.06);
             border-color: rgba(255, 200, 0, 0.1);
             color: #feda7a;
             font-size: clamp(14px, 2vh, 20px);
         }
-        .touch-key.space-key:active,
-        .touch-key.space-key.active {
+        .touch-key.pause-key:active,
+        .touch-key.pause-key.active {
             background: rgba(255, 200, 0, 0.15);
             border-color: rgba(255, 200, 0, 0.3);
             color: #ffd966;
@@ -198,78 +199,34 @@
         }
 
         @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            10% {
-                transform: translateX(-10px);
-            }
-            30% {
-                transform: translateX(10px);
-            }
-            50% {
-                transform: translateX(-6px);
-            }
-            70% {
-                transform: translateX(6px);
-            }
-            90% {
-                transform: translateX(-3px);
-            }
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-10px); }
+            30% { transform: translateX(10px); }
+            50% { transform: translateX(-6px); }
+            70% { transform: translateX(6px); }
+            90% { transform: translateX(-3px); }
         }
         .shaking {
             animation: shake 0.4s ease-out;
         }
         @keyframes bossFlash {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.5);
-            }
-            30% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.2);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(1);
-            }
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
         }
         @keyframes fadeOut {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(10px);
-            }
-            20% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
         }
         @keyframes slideIn {
-            0% {
-                opacity: 0;
-                transform: translateX(60px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            0% { opacity: 0; transform: translateX(60px); }
+            100% { opacity: 1; transform: translateX(0); }
         }
         @keyframes slideOut {
-            0% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(60px);
-            }
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(60px); }
         }
 
         .modal-overlay {
@@ -441,10 +398,10 @@
             .touch-key {
                 min-width: 36px;
                 padding: 8px 8px;
-                font-size: clamp(14px, 2.2vh, 20px);
+                font-size: clamp(16px, 2.5vh, 22px);
             }
-            .touch-key.space-key {
-                max-width: 80px;
+            .touch-key.pause-key {
+                max-width: 70px;
                 font-size: clamp(12px, 1.8vh, 16px);
             }
             .modal-box {
@@ -472,21 +429,22 @@
 
         <canvas id="gameCanvas"></canvas>
 
+        <!-- ===== 手机虚拟键盘（上下左右 + 暂停） ===== -->
         <div class="touch-controls" id="touchControls">
             <div class="key-row">
-                <div class="touch-key" data-key="w">W</div>
-                <div class="touch-key" data-key="space">␣</div>
-                <div class="touch-key" data-key="s">S</div>
+                <div class="touch-key" data-key="up">⬆</div>
+                <div class="touch-key pause-key" data-key="pause">⏸️ 暂停</div>
+                <div class="touch-key" data-key="down">⬇</div>
             </div>
             <div class="key-row">
-                <div class="touch-key" data-key="a">A</div>
-                <div class="touch-key space-key" data-key="space">␣ 开始/暂停</div>
-                <div class="touch-key" data-key="d">D</div>
+                <div class="touch-key" data-key="left">⬅</div>
+                <div class="touch-key pause-key" data-key="pause">⏸️ 开始</div>
+                <div class="touch-key" data-key="right">➡</div>
             </div>
         </div>
 
         <div class="bottom-bar">
-            <span class="hint-text" id="statusText">[ 点击/空格 开始 | WASD移动 ]</span>
+            <span class="hint-text" id="statusText">[ 点击/空格 开始 | 方向键移动 ]</span>
             <button class="btn" id="restartBtn">⟳ 重启</button>
         </div>
     </div>
@@ -501,12 +459,12 @@
             <div class="modal-section">
                 <h3>🎮 操作说明</h3>
                 <ul>
-                    <li><strong>鼠标左键 / 空格键</strong>：开始 / 暂停 / 重新开始</li>
-                    <li><strong>W</strong>：向上跳一格</li>
-                    <li><strong>S</strong>：向下跳一格</li>
-                    <li><strong>A</strong>：向左闪避</li>
-                    <li><strong>D</strong>：向右闪避</li>
-                    <li>💀 碰到障碍即结束，点击或按空格重新开始</li>
+                    <li><strong>鼠标左键 / 暂停键</strong>：开始 / 暂停 / 重新开始</li>
+                    <li><strong>⬆</strong>：向上跳一格</li>
+                    <li><strong>⬇</strong>：向下跳一格</li>
+                    <li><strong>⬅</strong>：向左闪避</li>
+                    <li><strong>➡</strong>：向右闪避</li>
+                    <li>💀 碰到障碍即结束，点击暂停键重新开始</li>
                 </ul>
             </div>
             <div class="modal-section">
@@ -880,7 +838,6 @@
                 showBossWarning();
             }
 
-            // ---- 生成陷阱 ----
             function spawnTrap() {
                 const lane = Math.floor(Math.random() * LANE_COUNT);
                 const laneY = getLaneY(lane);
@@ -897,7 +854,6 @@
                 });
             }
 
-            // ---- 生成护盾道具 ----
             function spawnPowerup() {
                 const lane = Math.floor(Math.random() * LANE_COUNT);
                 const laneY = getLaneY(lane);
@@ -929,10 +885,10 @@
             }
 
             function updateStatus() {
-                if (game.state === 'ready') statusText.textContent = '[ 点击或按空格开始 ]';
-                else if (game.state === 'playing' && game.paused) statusText.textContent = '[ ⏸️ 已暂停 | 点击或按空格继续 ]';
-                else if (game.state === 'playing') statusText.textContent = '[ WASD移动 | 点击或按空格暂停 ]';
-                else if (game.state === 'dead') statusText.textContent = '[ 💀 点击或按空格重新开始 ]';
+                if (game.state === 'ready') statusText.textContent = '[ 点击或按暂停键开始 ]';
+                else if (game.state === 'playing' && game.paused) statusText.textContent = '[ ⏸️ 已暂停 | 点击或按暂停键继续 ]';
+                else if (game.state === 'playing') statusText.textContent = '[ 方向键移动 | 点击或按暂停键暂停 ]';
+                else if (game.state === 'dead') statusText.textContent = '[ 💀 点击或按暂停键重新开始 ]';
             }
 
             function resetGame() {
@@ -1031,7 +987,75 @@
                 checkAchievements();
                 updateUI();
                 updateStatus();
+
+                // 排行榜上传
+                const name = prompt('🏆 上传分数！\n请输入你的名字：', '玩家');
+                if (name && game.score > 0) {
+                    uploadScore(name, game.score);
+                }
             }
+
+            // =============================================
+            // 腾讯云开发排行榜功能
+            // =============================================
+
+            const app = cloudbase.init({
+                env: '你的环境ID' // ⚠️ 换成你的环境ID
+            });
+
+            function uploadScore(playerName, score) {
+                const db = app.database();
+                db.collection('ranking').add({
+                    player: playerName,
+                    score: score,
+                    time: new Date()
+                }).then(() => {
+                    alert(`✅ 分数已上传！\n玩家：${playerName}\n得分：${score}`);
+                }).catch(err => {
+                    alert('❌ 上传失败：' + err.message);
+                });
+            }
+
+            function getRanking() {
+                const db = app.database();
+                db.collection('ranking')
+                    .orderBy('score', 'desc')
+                    .limit(100)
+                    .get()
+                    .then(res => {
+                        showRankingPopup(res.data);
+                    }).catch(err => {
+                        alert('❌ 获取排行榜失败：' + err.message);
+                    });
+            }
+
+            function showRankingPopup(data) {
+                let html = '<h2>🏆 全国排行榜</h2><ul>';
+                if (data.length === 0) {
+                    html += '<li>暂无数据，快来挑战！</li>';
+                } else {
+                    data.forEach((item, index) => {
+                        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                        html += `<li>${medal} ${item.player} — ${item.score}分</li>`;
+                    });
+                }
+                html += '</ul><button onclick="this.parentElement.remove()">关闭</button>';
+
+                const popup = document.createElement('div');
+                popup.style.cssText = `
+                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        background: #1a2a3a; color: #fff; padding: 30px; border-radius: 16px;
+                        z-index: 9999; max-width: 400px; width: 90%;
+                        box-shadow: 0 0 60px rgba(0,0,0,0.8);
+                        font-family: 'Courier New', monospace;
+                    `;
+                popup.innerHTML = html;
+                document.body.appendChild(popup);
+            }
+
+            // =============================================
+            // 方向键操作（电脑键盘也支持）
+            // =============================================
 
             function moveUp() {
                 if (game.state !== 'playing' || game.paused) return;
@@ -1061,6 +1085,14 @@
                 if (game.state !== 'playing' || game.paused) return;
                 player.x += 25 * scale;
                 if (player.x > W - 30) player.x = W - 30;
+            }
+
+            function handleGameControl() {
+                if (game.state === 'ready' || game.state === 'dead') {
+                    startGame();
+                } else if (game.state === 'playing') {
+                    togglePause();
+                }
             }
 
             function spawnObstacle() {
@@ -1178,7 +1210,6 @@
                 const px = player.x - player.w / 2;
                 const py = player.y - player.h / 2;
 
-                // ---- 碰撞检测：障碍 ----
                 for (let obs of obstacles) {
                     if (obs.lane === player.lane) {
                         if (px < obs.x + obs.w &&
@@ -1249,7 +1280,6 @@
                     }
                 }
 
-                // ---- 陷阱检测 ----
                 for (let t of traps) {
                     if (!t.active) continue;
                     if (t.lane === player.lane) {
@@ -1279,7 +1309,6 @@
                     }
                 }
 
-                // ---- 护盾道具拾取 ----
                 for (let p of powerups) {
                     if (!p.active) continue;
                     if (p.lane === player.lane) {
@@ -1339,14 +1368,11 @@
                 ctx.fillStyle = 'rgba(0, 255, 200, 0.05)';
                 ctx.fillRect(0, hlY - 22 * scale, W, 44 * scale);
 
-                // ---- 绘制陷阱（完全不同风格） ----
                 for (let t of traps) {
                     if (!t.active) continue;
                     if (t.type === 'break') {
-                        // 🔴 断路陷阱：红色锯齿+底部XXX
                         ctx.shadowColor = 'rgba(255,50,50,0.4)';
                         ctx.shadowBlur = 25 * scale;
-                        // 锯齿主体
                         ctx.fillStyle = '#cc2233';
                         ctx.beginPath();
                         const segs = 6;
@@ -1363,70 +1389,59 @@
                         }
                         ctx.closePath();
                         ctx.fill();
-                        // 底部断裂标记 XXX
                         ctx.shadowBlur = 0;
                         ctx.fillStyle = '#ff6666';
                         ctx.font = `bold ${12 * scale}px monospace`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'bottom';
                         ctx.fillText('✕ ✕ ✕', t.x + t.w / 2, t.y + t.h - 2 * scale);
-                        // 红色边框
                         ctx.strokeStyle = 'rgba(255,80,80,0.5)';
                         ctx.lineWidth = 2 * scale;
                         ctx.strokeRect(t.x, t.y, t.w, t.h);
                     } else {
-                        // 🟢 升降陷阱：绿色+三个向上箭头
                         ctx.shadowColor = 'rgba(0,255,100,0.4)';
                         ctx.shadowBlur = 25 * scale;
                         ctx.fillStyle = '#22aa44';
                         ctx.beginPath();
                         roundRect(ctx, t.x, t.y, t.w, t.h, 6 * scale);
                         ctx.fill();
-                        // 三个向上箭头 ↑ ↑ ↑
                         ctx.shadowBlur = 0;
                         ctx.fillStyle = '#88ff88';
                         ctx.font = `bold ${16 * scale}px monospace`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         ctx.fillText('↑ ↑ ↑', t.x + t.w / 2, t.y + t.h / 2 + 2 * scale);
-                        // 绿色边框发光
                         ctx.strokeStyle = 'rgba(0,255,100,0.4)';
                         ctx.lineWidth = 2 * scale;
                         ctx.strokeRect(t.x, t.y, t.w, t.h);
                     }
                 }
 
-                // ---- 绘制护盾道具（蓝色发光球体） ----
                 for (let p of powerups) {
                     if (!p.active) continue;
                     const pulse = 0.8 + 0.2 * Math.sin(game.frame * 0.05);
                     ctx.shadowColor = 'rgba(0, 200, 255, 0.6)';
                     ctx.shadowBlur = 40 * scale * pulse;
-                    // 外发光圈
                     ctx.beginPath();
                     ctx.arc(p.x + p.w / 2, p.y + p.h / 2, 16 * scale * pulse, 0, Math.PI * 2);
                     ctx.fillStyle = 'rgba(0, 200, 255, 0.15)';
                     ctx.fill();
-                    // 核心球体
                     ctx.shadowBlur = 30 * scale * pulse;
                     ctx.beginPath();
                     ctx.arc(p.x + p.w / 2, p.y + p.h / 2, 12 * scale * pulse, 0, Math.PI * 2);
                     ctx.fillStyle = '#00ccff';
                     ctx.fill();
-                    // 盾牌图标
                     ctx.shadowBlur = 0;
                     ctx.font = `${18 * scale}px monospace`;
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText('🛡️', p.x + p.w / 2, p.y + p.h / 2 + 1 * scale);
-                    // 高光
                     ctx.fillStyle = 'rgba(255,255,255,0.3)';
                     ctx.beginPath();
                     ctx.arc(p.x + p.w / 2 - 4 * scale, p.y + p.h / 2 - 6 * scale, 3 * scale, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
-                // ---- 绘制障碍 ----
                 for (let obs of obstacles) {
                     const isDanger = (obs.type === 'spike' || obs.type === 'moving' || obs.type === 'swing');
                     const isBoss = (obs.type === 'boss');
@@ -1483,7 +1498,6 @@
                 }
                 ctx.shadowBlur = 0;
 
-                // ---- 玩家 ----
                 const px = player.x - player.w / 2,
                     py = player.y - player.h / 2;
                 const s = scale;
@@ -1559,7 +1573,6 @@
 
                 ctx.shadowBlur = 0;
 
-                // ---- HUD ----
                 ctx.fillStyle = 'rgba(0, 255, 200, 0.3)';
                 ctx.font = `${14 * s}px monospace`;
                 ctx.textAlign = 'left';
@@ -1574,7 +1587,6 @@
                     ctx.fillText('🛡️ ' + Math.ceil(player.shieldTimer / 60) + 's', W - 10, 8);
                 }
 
-                // 图例（右下角）
                 ctx.fillStyle = 'rgba(255,255,255,0.15)';
                 ctx.font = `${11 * s}px monospace`;
                 ctx.textAlign = 'right';
@@ -1587,10 +1599,10 @@
                 if (game.state === 'ready') {
                     ctx.fillStyle = 'rgba(0, 255, 200, 0.5)';
                     ctx.font = `bold ${28 * s}px monospace`;
-                    ctx.fillText('⚡ 点击或按空格开始', W / 2, H * 0.30);
+                    ctx.fillText('⚡ 点击或按暂停键开始', W / 2, H * 0.30);
                     ctx.fillStyle = 'rgba(255,255,255,0.12)';
                     ctx.font = `${14 * s}px monospace`;
-                    ctx.fillText('W上 S下 A左 D右', W / 2, H * 0.42);
+                    ctx.fillText('⬆上 ⬇下 ⬅左 ➡右', W / 2, H * 0.42);
                 }
 
                 if (game.state === 'playing' && game.paused) {
@@ -1599,7 +1611,7 @@
                     ctx.fillText('⏸️ 已暂停', W / 2, H * 0.30);
                     ctx.fillStyle = 'rgba(255,255,255,0.15)';
                     ctx.font = `${16 * s}px monospace`;
-                    ctx.fillText('点击或按空格继续', W / 2, H * 0.42);
+                    ctx.fillText('点击或按暂停键继续', W / 2, H * 0.42);
                 }
 
                 if (game.state === 'dead') {
@@ -1608,7 +1620,7 @@
                     ctx.fillText('💀 你没了', W / 2, H * 0.30);
                     ctx.fillStyle = 'rgba(255,255,255,0.2)';
                     ctx.font = `${16 * s}px monospace`;
-                    ctx.fillText('点击或按空格重新开始', W / 2, H * 0.44);
+                    ctx.fillText('点击或按暂停键重新开始', W / 2, H * 0.44);
                 }
 
                 ctx.textAlign = 'right';
@@ -1647,48 +1659,45 @@
                 container.innerHTML = html;
             }
 
-            function handleGameControl() {
-                if (game.state === 'ready' || game.state === 'dead') {
-                    startGame();
-                } else if (game.state === 'playing') {
-                    togglePause();
-                }
-            }
-
+            // ---- 事件绑定 ----
             canvas.addEventListener('click', (e) => {
                 e.preventDefault();
                 handleGameControl();
             });
 
+            // 电脑键盘：方向键 + 空格（暂停）
             document.addEventListener('keydown', (e) => {
-                const key = e.key.toLowerCase();
-                if (key === ' ') {
+                const key = e.key;
+                // 空格键 = 暂停/开始/重新开始
+                if (key === ' ' || key === 'Space') {
                     e.preventDefault();
                     handleGameControl();
                     return;
                 }
-                if (key === 'w') { e.preventDefault();
+                // 方向键
+                if (key === 'ArrowUp') { e.preventDefault();
                     moveUp(); }
-                if (key === 's') { e.preventDefault();
+                if (key === 'ArrowDown') { e.preventDefault();
                     moveDown(); }
-                if (key === 'a') { e.preventDefault();
+                if (key === 'ArrowLeft') { e.preventDefault();
                     moveLeft(); }
-                if (key === 'd') { e.preventDefault();
+                if (key === 'ArrowRight') { e.preventDefault();
                     moveRight(); }
             });
 
+            // ---- 手机虚拟键盘 ----
             const touchKeys = document.querySelectorAll('.touch-key');
             touchKeys.forEach(el => {
                 el.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     const key = el.dataset.key;
                     el.classList.add('active');
-                    if (key === 'space') {
+                    if (key === 'pause') {
                         handleGameControl();
-                    } else if (key === 'w') moveUp();
-                    else if (key === 's') moveDown();
-                    else if (key === 'a') moveLeft();
-                    else if (key === 'd') moveRight();
+                    } else if (key === 'up') moveUp();
+                    else if (key === 'down') moveDown();
+                    else if (key === 'left') moveLeft();
+                    else if (key === 'right') moveRight();
                 }, { passive: false });
 
                 el.addEventListener('touchend', (e) => {
@@ -1704,12 +1713,12 @@
                     e.preventDefault();
                     const key = el.dataset.key;
                     el.classList.add('active');
-                    if (key === 'space') {
+                    if (key === 'pause') {
                         handleGameControl();
-                    } else if (key === 'w') moveUp();
-                    else if (key === 's') moveDown();
-                    else if (key === 'a') moveLeft();
-                    else if (key === 'd') moveRight();
+                    } else if (key === 'up') moveUp();
+                    else if (key === 'down') moveDown();
+                    else if (key === 'left') moveLeft();
+                    else if (key === 'right') moveRight();
                 });
 
                 el.addEventListener('mouseup', (e) => {
@@ -1748,6 +1757,23 @@
                     document.getElementById('achieveModal').classList.remove('active');
                 }
             });
+
+            // 排行榜按钮（浮窗）
+            const rankBtn = document.createElement('button');
+            rankBtn.innerHTML = '🏆';
+            rankBtn.style.cssText = `
+                    position: fixed; bottom: 70px; right: 14px;
+                    background: rgba(255, 200, 0, 0.15);
+                    border: 1px solid rgba(255, 200, 0, 0.2);
+                    border-radius: 50%;
+                    width: 50px; height: 50px;
+                    color: #feda7a; font-size: 24px;
+                    cursor: pointer; z-index: 50;
+                    font-family: 'Courier New', monospace;
+                    backdrop-filter: blur(4px);
+                `;
+            rankBtn.addEventListener('click', getRanking);
+            document.body.appendChild(rankBtn);
 
             window.addEventListener('resize', () => {
                 resize();
