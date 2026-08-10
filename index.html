@@ -24,36 +24,23 @@
             touch-action: none;
         }
 
-        /* ===== 竖屏强制 ===== */
-        @media (orientation: portrait) {
-            .game-wrapper {
-                width: 100vw;
-                height: 100vh;
-                background: #0a0e1a;
-                display: flex;
-                flex-direction: column;
-                padding: 8px 10px 10px;
-                position: relative;
-                max-width: 100%;
-                max-height: 100%;
-            }
+        /* 竖屏强制 - 手机端全屏，电脑端居中限制宽度 */
+        .game-wrapper {
+            width: 100vw;
+            height: 100vh;
+            background: #0a0e1a;
+            display: flex;
+            flex-direction: column;
+            padding: 8px 10px 10px;
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
         }
-        @media (orientation: landscape) {
+        @media (orientation: landscape) and (min-width: 768px) {
             .game-wrapper {
-                width: 100vw;
-                height: 100vh;
-                background: #0a0e1a;
-                display: flex;
-                flex-direction: column;
-                padding: 8px 10px 10px;
-                position: relative;
-                max-width: 100%;
-                max-height: 100%;
-            }
-            /* 横屏时限制宽度，保持比例 */
-            .game-wrapper {
-                max-width: 500px;
+                max-width: 480px;
                 margin: 0 auto;
+                height: 100vh;
             }
         }
 
@@ -557,6 +544,8 @@
     <script>
         // =============================================
         // 向上跑酷 - 纯前端游戏
+        // WASD + 空格（电脑端不变）
+        // 方向键 + 暂停键（手机端）
         // =============================================
 
         (function() {
@@ -1127,7 +1116,6 @@
                     initX: W * 0.1 + Math.random() * W * 0.8,
                     initY: -30 - Math.random() * 60,
                     speedMul: 0.8 + Math.random() * 0.4,
-                    // 向下移动速度（障碍下落）
                     fallSpeed: 0.5 + Math.random() * 0.8,
                 };
 
@@ -1155,7 +1143,7 @@
                     game.difficulty += 0.1;
                 }
 
-                // 玩家物理（现在玩家向上跳）
+                // 玩家物理（向上跳跃）
                 player.vy += GRAVITY * scale * 0.8;
                 player.y += player.vy;
 
@@ -1198,7 +1186,6 @@
                 // 更新障碍（向下移动）
                 for (let obs of obstacles) {
                     obs.y += game.speed * scale * 0.8 * obs.speedMul;
-                    // 左右摆动
                     if (obs.type === 'moving') {
                         obs.moveTimer += 0.04;
                         obs.x = obs.initX + Math.sin(obs.moveTimer) * obs.moveRange * 0.5;
@@ -1694,7 +1681,7 @@
                 handleGameControl();
             });
 
-            // 电脑键盘：WASD + 空格
+            // 电脑键盘：WASD + 空格（完全不变）
             document.addEventListener('keydown', (e) => {
                 const key = e.key;
                 if (key === ' ' || key === 'Space') {
@@ -1712,7 +1699,7 @@
                     moveRight(); }
             });
 
-            // 手机虚拟键盘
+            // 手机虚拟键盘：方向键 + 暂停键
             const touchKeys = document.querySelectorAll('.touch-key');
             touchKeys.forEach(el => {
                 el.addEventListener('touchstart', (e) => {
