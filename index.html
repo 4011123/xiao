@@ -29,24 +29,16 @@
             background: #0a0e1a;
             display: flex;
             flex-direction: column;
-            padding: 8px 10px 10px;
+            padding: 10px 14px 12px;
             position: relative;
             max-width: 100%;
             max-height: 100%;
         }
-        @media (orientation: landscape) and (min-width: 768px) {
-            .game-wrapper {
-                max-width: 480px;
-                margin: 0 auto;
-                height: 100vh;
-            }
-        }
-
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2px 8px 2px;
+            padding: 0 2px 10px 2px;
             border-bottom: 1px solid rgba(0, 255, 200, 0.08);
             flex-shrink: 0;
             flex-wrap: wrap;
@@ -55,16 +47,16 @@
         .top-left {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .top-right {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         .score-item {
             color: #8ab4d6;
-            font-size: clamp(10px, 1.6vh, 16px);
+            font-size: clamp(11px, 1.8vh, 18px);
             font-weight: 500;
             font-family: 'Courier New', monospace;
             transition: color 0.3s;
@@ -81,9 +73,9 @@
             background: rgba(0, 255, 200, 0.06);
             border: 1px solid rgba(0, 255, 200, 0.15);
             color: #00f5c8;
-            padding: 2px 10px;
-            border-radius: 14px;
-            font-size: clamp(9px, 1.3vh, 14px);
+            padding: 2px 12px;
+            border-radius: 16px;
+            font-size: clamp(10px, 1.5vh, 16px);
             font-weight: 700;
             cursor: pointer;
             font-family: 'Courier New', monospace;
@@ -95,9 +87,9 @@
             background: rgba(255, 200, 0, 0.06);
             border: 1px solid rgba(255, 200, 0, 0.15);
             color: #feda7a;
-            padding: 2px 10px;
-            border-radius: 14px;
-            font-size: clamp(9px, 1.3vh, 14px);
+            padding: 2px 12px;
+            border-radius: 16px;
+            font-size: clamp(10px, 1.5vh, 16px);
             font-weight: 700;
             cursor: pointer;
             font-family: 'Courier New', monospace;
@@ -122,21 +114,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 6px;
+            padding-top: 8px;
             flex-shrink: 0;
         }
         .hint-text {
             color: #5a7a9a;
-            font-size: clamp(9px, 1.2vh, 13px);
+            font-size: clamp(10px, 1.4vh, 15px);
             font-family: 'Courier New', monospace;
         }
         .btn {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.06);
             color: #8ab4d6;
-            padding: 3px 14px;
-            border-radius: 14px;
-            font-size: clamp(9px, 1.2vh, 13px);
+            padding: 4px 16px;
+            border-radius: 16px;
+            font-size: clamp(10px, 1.4vh, 15px);
             cursor: pointer;
             font-family: 'Courier New', monospace;
         }
@@ -144,29 +136,30 @@
             transform: scale(0.94);
         }
 
+        /* ===== 手机虚拟键盘 ===== */
         .touch-controls {
             display: none;
             flex-shrink: 0;
-            padding-top: 6px;
-            gap: 5px;
+            padding-top: 8px;
+            gap: 6px;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
         }
         .touch-controls .key-row {
             display: flex;
-            gap: 5px;
+            gap: 6px;
             justify-content: center;
             width: 100%;
         }
         .touch-key {
-            min-width: 44px;
-            padding: 8px 12px;
+            min-width: 50px;
+            padding: 10px 14px;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
+            border-radius: 12px;
             color: #b0c8ee;
-            font-size: clamp(16px, 2.5vh, 24px);
+            font-size: clamp(18px, 2.8vh, 28px);
             font-weight: 700;
             font-family: 'Courier New', monospace;
             text-align: center;
@@ -175,7 +168,7 @@
             touch-action: none;
             -webkit-tap-highlight-color: transparent;
             flex: 1;
-            max-width: 60px;
+            max-width: 70px;
         }
         .touch-key:active,
         .touch-key.active {
@@ -186,11 +179,11 @@
         }
         .touch-key.pause-key {
             flex: 1.5;
-            max-width: 80px;
+            max-width: 90px;
             background: rgba(255, 200, 0, 0.06);
             border-color: rgba(255, 200, 0, 0.1);
             color: #feda7a;
-            font-size: clamp(12px, 1.8vh, 16px);
+            font-size: clamp(14px, 2vh, 20px);
         }
         .touch-key.pause-key:active,
         .touch-key.pause-key.active {
@@ -206,78 +199,34 @@
         }
 
         @keyframes shake {
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-            10% {
-                transform: translateX(-8px);
-            }
-            30% {
-                transform: translateX(8px);
-            }
-            50% {
-                transform: translateX(-5px);
-            }
-            70% {
-                transform: translateX(5px);
-            }
-            90% {
-                transform: translateX(-2px);
-            }
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-10px); }
+            30% { transform: translateX(10px); }
+            50% { transform: translateX(-6px); }
+            70% { transform: translateX(6px); }
+            90% { transform: translateX(-3px); }
         }
         .shaking {
             animation: shake 0.4s ease-out;
         }
         @keyframes bossFlash {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.5);
-            }
-            30% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.2);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(1);
-            }
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
         }
         @keyframes fadeOut {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(10px);
-            }
-            20% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
         }
         @keyframes slideIn {
-            0% {
-                opacity: 0;
-                transform: translateX(60px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            0% { opacity: 0; transform: translateX(60px); }
+            100% { opacity: 1; transform: translateX(0); }
         }
         @keyframes slideOut {
-            0% {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(60px);
-            }
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(60px); }
         }
 
         .modal-overlay {
@@ -297,11 +246,11 @@
         .modal-box {
             background: linear-gradient(145deg, #121c2e, #0a0f1a);
             border: 1px solid rgba(0, 255, 200, 0.12);
-            border-radius: 20px;
-            max-width: 460px;
+            border-radius: 24px;
+            max-width: 500px;
             width: 100%;
             max-height: 80vh;
-            padding: 20px 24px 24px;
+            padding: 24px 28px 28px;
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
             overflow-y: auto;
         }
@@ -310,12 +259,12 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(0, 255, 200, 0.08);
-            padding-bottom: 10px;
-            margin-bottom: 14px;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
         }
         .modal-header h2 {
             color: #00f5c8;
-            font-size: clamp(16px, 2.5vh, 24px);
+            font-size: clamp(18px, 2.8vh, 26px);
             font-weight: 700;
             font-family: 'Courier New', monospace;
         }
@@ -323,25 +272,25 @@
             background: none;
             border: none;
             color: #4a6a8a;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
         }
         .modal-close:hover {
             color: #00f5c8;
         }
         .modal-section {
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
         .modal-section h3 {
             color: #8ab4d6;
-            font-size: clamp(12px, 1.6vh, 16px);
+            font-size: clamp(13px, 1.8vh, 17px);
             margin-bottom: 4px;
             font-family: 'Courier New', monospace;
         }
         .modal-section ul {
-            padding-left: 16px;
+            padding-left: 18px;
             color: #6a8aaa;
-            font-size: clamp(11px, 1.4vh, 14px);
+            font-size: clamp(12px, 1.5vh, 15px);
             line-height: 1.8;
             font-family: 'Courier New', monospace;
         }
@@ -369,16 +318,16 @@
         .rank-item .rank-name {
             font-weight: 700;
             color: #d0dcff;
-            font-size: clamp(12px, 1.5vh, 16px);
+            font-size: clamp(13px, 1.6vh, 17px);
             font-family: 'Courier New', monospace;
         }
         .rank-item .rank-score {
             color: #6a8aaa;
-            font-size: clamp(10px, 1.2vh, 14px);
+            font-size: clamp(11px, 1.3vh, 15px);
             font-family: 'Courier New', monospace;
         }
         .rank-item .rank-icon {
-            margin-right: 6px;
+            margin-right: 8px;
         }
         .rank-item .rank-left {
             display: flex;
@@ -398,12 +347,12 @@
         .achievement-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 8px;
         }
         .achieve-item {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            padding: 8px 10px;
+            border-radius: 10px;
+            padding: 10px 12px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             transition: 0.2s;
         }
@@ -415,21 +364,21 @@
             opacity: 0.4;
         }
         .achieve-item .ach-icon {
-            font-size: 18px;
+            font-size: 22px;
         }
         .achieve-item .ach-name {
             color: #d0dcff;
-            font-size: clamp(10px, 1.2vh, 13px);
+            font-size: clamp(12px, 1.4vh, 15px);
             font-weight: 700;
             font-family: 'Courier New', monospace;
         }
         .achieve-item .ach-desc {
             color: #6a8aaa;
-            font-size: clamp(9px, 1vh, 12px);
+            font-size: clamp(10px, 1.2vh, 13px);
             font-family: 'Courier New', monospace;
         }
         .achieve-item .ach-status {
-            font-size: clamp(9px, 1vh, 12px);
+            font-size: clamp(10px, 1.2vh, 13px);
             font-weight: 700;
         }
         .achieve-item .ach-status.unlocked {
@@ -441,22 +390,22 @@
 
         @media (max-width: 500px) {
             .game-wrapper {
-                padding: 4px 6px 6px;
+                padding: 6px 8px 8px;
             }
             .top-bar {
-                padding-bottom: 4px;
+                padding-bottom: 6px;
             }
             .touch-key {
-                min-width: 32px;
-                padding: 6px 8px;
-                font-size: clamp(14px, 2.2vh, 18px);
+                min-width: 36px;
+                padding: 8px 8px;
+                font-size: clamp(16px, 2.5vh, 22px);
             }
             .touch-key.pause-key {
-                max-width: 60px;
-                font-size: clamp(10px, 1.6vh, 14px);
+                max-width: 70px;
+                font-size: clamp(12px, 1.8vh, 16px);
             }
             .modal-box {
-                padding: 14px 14px 18px;
+                padding: 16px 16px 20px;
             }
             .achievement-grid {
                 grid-template-columns: 1fr;
@@ -480,6 +429,7 @@
 
         <canvas id="gameCanvas"></canvas>
 
+        <!-- ===== 手机虚拟键盘（已改成方向键） ===== -->
         <div class="touch-controls" id="touchControls">
             <div class="key-row">
                 <div class="touch-key" data-key="up">⬆</div>
@@ -510,8 +460,8 @@
                 <h3>🎮 操作说明</h3>
                 <ul>
                     <li><strong>鼠标左键 / 空格键</strong>：开始 / 暂停 / 重新开始</li>
-                    <li><strong>W</strong>：向上移动</li>
-                    <li><strong>S</strong>：向下移动</li>
+                    <li><strong>W</strong>：向上跳一格</li>
+                    <li><strong>S</strong>：向下跳一格</li>
                     <li><strong>A</strong>：向左闪避</li>
                     <li><strong>D</strong>：向右闪避</li>
                     <li>💀 碰到障碍即结束，点击或按空格重新开始</li>
@@ -538,6 +488,10 @@
     </div>
 
     <script>
+        // =============================================
+        // 纯前端游戏（无腾讯云、无排行榜）
+        // =============================================
+
         (function() {
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
@@ -586,7 +540,6 @@
                 return r;
             }
 
-            // 4条竖直跑道
             const LANE_COUNT = 4;
             const LANE_NAMES = ['⬆ 顶层', '⬆ 上层', '⬇ 下层', '⬇ 底层'];
 
@@ -874,8 +827,8 @@
                 const lane = Math.floor(Math.random() * LANE_COUNT);
                 const laneY = getLaneY(lane);
                 const boss = {
-                    x: W * 0.1 + Math.random() * W * 0.8,
-                    y: -30 - Math.random() * 30,
+                    x: W + 30,
+                    y: laneY - 30 * scale,
                     w: 40 * scale,
                     h: 60 * scale,
                     lane: lane,
@@ -883,9 +836,7 @@
                     passed: false,
                     hp: 3,
                     moveTimer: 0,
-                    initX: W * 0.1 + Math.random() * W * 0.8,
-                    initY: -30 - Math.random() * 30,
-                    speedMul: 0.8 + Math.random() * 0.4,
+                    initY: laneY - 30 * scale,
                 };
                 obstacles.push(boss);
                 showBossWarning();
@@ -896,15 +847,14 @@
                 const laneY = getLaneY(lane);
                 const type = Math.random() > 0.5 ? 'break' : 'lift';
                 traps.push({
-                    x: W * 0.1 + Math.random() * W * 0.8,
-                    y: -30 - Math.random() * 20,
+                    x: W + 30,
+                    y: laneY - 10 * scale,
                     w: 34 * scale,
                     h: 20 * scale,
                     lane: lane,
                     type: type,
                     active: true,
                     passed: false,
-                    moveTimer: Math.random() * 100,
                 });
             }
 
@@ -912,14 +862,13 @@
                 const lane = Math.floor(Math.random() * LANE_COUNT);
                 const laneY = getLaneY(lane);
                 powerups.push({
-                    x: W * 0.1 + Math.random() * W * 0.8,
-                    y: -30 - Math.random() * 20,
+                    x: W + 30,
+                    y: laneY - 16 * scale,
                     w: 22 * scale,
                     h: 32 * scale,
                     lane: lane,
                     active: true,
                     passed: false,
-                    moveTimer: Math.random() * 100,
                 });
             }
 
@@ -1045,7 +994,7 @@
             }
 
             // =============================================
-            // 操作函数
+            // 方向键操作（手机用）
             // =============================================
 
             function moveUp() {
@@ -1086,9 +1035,9 @@
                 }
             }
 
-            // ---- 生成障碍（竖屏版） ----
             function spawnObstacle() {
                 const lane = Math.floor(Math.random() * LANE_COUNT);
+                const laneY = getLaneY(lane);
                 const types = ['box', 'spike', 'moving', 'swing', 'double'];
                 const type = types[Math.floor(Math.random() * types.length)];
 
@@ -1097,8 +1046,8 @@
                 const w = (12 + Math.random() * 12) * scale * sizeScale;
 
                 const obs = {
-                    x: W * 0.1 + Math.random() * W * 0.8,
-                    y: -30 - Math.random() * 40,
+                    x: W + 20,
+                    y: laneY - h / 2,
                     w: w,
                     h: h,
                     lane: lane,
@@ -1107,15 +1056,15 @@
                     moveTimer: Math.random() * 100,
                     moveSpeed: (0.5 + Math.random() * 2) * scale,
                     moveRange: (20 + Math.random() * 50) * scale,
-                    initX: W * 0.1 + Math.random() * W * 0.8,
-                    initY: -30 - Math.random() * 40,
+                    initX: W + 20,
+                    initY: laneY - h / 2,
                     speedMul: 0.8 + Math.random() * 0.4,
                 };
 
                 if (type === 'double') {
                     const gap = 25 * scale;
                     const obs2 = { ...obs };
-                    obs2.x = obs.x + gap;
+                    obs2.x = W + 20 + gap;
                     obs2.type = 'box';
                     obs2.w = (10 + Math.random() * 10) * scale;
                     obs2.h = (10 + Math.random() * 14) * scale;
@@ -1125,7 +1074,6 @@
                 obstacles.push(obs);
             }
 
-            // ---- 更新 ----
             function update() {
                 if (game.state !== 'playing' || game.paused) return;
                 game.frame++;
@@ -1137,8 +1085,7 @@
                     game.difficulty += 0.1;
                 }
 
-                // 玩家物理
-                player.vy += GRAVITY * scale * 0.8;
+                player.vy += GRAVITY * scale;
                 player.y += player.vy;
 
                 const targetY = getLaneY(player.lane) - player.h / 2;
@@ -1177,39 +1124,32 @@
                     powerupTimer = POWERUP_INTERVAL / (game.speed * 0.5);
                 }
 
-                // 更新障碍（向下移动）
                 for (let obs of obstacles) {
-                    obs.y += game.speed * scale * 0.8 * obs.speedMul;
+                    obs.x -= game.speed * scale * obs.speedMul;
                     if (obs.type === 'moving') {
                         obs.moveTimer += 0.04;
-                        obs.x = obs.initX + Math.sin(obs.moveTimer) * obs.moveRange * 0.5;
+                        obs.y = obs.initY + Math.sin(obs.moveTimer) * obs.moveRange * 0.5;
                     } else if (obs.type === 'swing') {
                         obs.moveTimer += 0.03;
-                        obs.x = obs.initX + Math.sin(obs.moveTimer) * obs.moveRange * 0.7;
+                        obs.y = obs.initY + Math.sin(obs.moveTimer) * obs.moveRange * 0.7;
+                        obs.x += Math.sin(obs.moveTimer * 0.5) * 1.2 * scale;
                     }
                 }
-                obstacles = obstacles.filter(o => o.y < H + 60);
+                obstacles = obstacles.filter(o => o.x > -100);
 
-                // 更新陷阱
                 for (let t of traps) {
-                    t.y += game.speed * scale * 0.7;
-                    t.x += Math.sin(t.moveTimer) * 0.5 * scale;
-                    t.moveTimer += 0.02;
+                    t.x -= game.speed * scale * 0.8;
                 }
-                traps = traps.filter(t => t.y < H + 60);
+                traps = traps.filter(t => t.x > -80);
 
-                // 更新护盾
                 for (let p of powerups) {
-                    p.y += game.speed * scale * 0.7;
-                    p.x += Math.sin(p.moveTimer) * 0.3 * scale;
-                    p.moveTimer += 0.02;
+                    p.x -= game.speed * scale * 0.8;
                 }
-                powerups = powerups.filter(p => p.y < H + 60);
+                powerups = powerups.filter(p => p.x > -80);
 
                 const px = player.x - player.w / 2;
                 const py = player.y - player.h / 2;
 
-                // 碰撞检测
                 for (let obs of obstacles) {
                     if (obs.lane === player.lane) {
                         if (px < obs.x + obs.w &&
@@ -1225,8 +1165,7 @@
                                     updateUI();
                                     playScoreSound();
                                     const msg = document.createElement('div');
-                                    msg.style.cssText =
-                                        `
+                                    msg.style.cssText = `
                                             position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
                                             color: #00f5c8; font-size: 32px; font-weight: 900;
                                             font-family: 'Courier New', monospace;
@@ -1245,8 +1184,7 @@
                             }
                             if (player.shield) {
                                 const shatter = document.createElement('div');
-                                shatter.style.cssText =
-                                    `
+                                shatter.style.cssText = `
                                         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
                                         color: #00f5c8; font-size: 36px; font-weight: 900;
                                         font-family: 'Courier New', monospace;
@@ -1263,7 +1201,7 @@
                             return;
                         }
                     }
-                    if (!obs.passed && obs.y > py + player.h) {
+                    if (!obs.passed && obs.x + obs.w < px - 10) {
                         obs.passed = true;
                         game.score++;
                         totalScore++;
@@ -1282,7 +1220,6 @@
                     }
                 }
 
-                // 陷阱检测
                 for (let t of traps) {
                     if (!t.active) continue;
                     if (t.lane === player.lane) {
@@ -1312,7 +1249,6 @@
                     }
                 }
 
-                // 护盾拾取
                 for (let p of powerups) {
                     if (!p.active) continue;
                     if (p.lane === player.lane) {
@@ -1346,7 +1282,6 @@
                 }
             }
 
-            // ---- 绘图 ----
             function draw() {
                 ctx.clearRect(0, 0, W, H);
 
@@ -1373,7 +1308,6 @@
                 ctx.fillStyle = 'rgba(0, 255, 200, 0.05)';
                 ctx.fillRect(0, hlY - 22 * scale, W, 44 * scale);
 
-                // 陷阱
                 for (let t of traps) {
                     if (!t.active) continue;
                     if (t.type === 'break') {
@@ -1423,7 +1357,6 @@
                     }
                 }
 
-                // 护盾
                 for (let p of powerups) {
                     if (!p.active) continue;
                     const pulse = 0.8 + 0.2 * Math.sin(game.frame * 0.05);
@@ -1449,13 +1382,12 @@
                     ctx.fill();
                 }
 
-                // 障碍
                 for (let obs of obstacles) {
                     const isDanger = (obs.type === 'spike' || obs.type === 'moving' || obs.type === 'swing');
                     const isBoss = (obs.type === 'boss');
                     const color = isBoss ? '#ff00aa' : (isDanger ? '#ff3a5a' : '#ffaa00');
                     ctx.shadowColor = isBoss ? 'rgba(255,0,170,0.4)' : (isDanger ? 'rgba(255,50,80,0.25)' :
-                        'rgba(255,200,0,0.2)');
+                    'rgba(255,200,0,0.2)');
                     ctx.shadowBlur = isBoss ? 35 * scale : 18 * scale;
 
                     if (isBoss) {
@@ -1506,7 +1438,6 @@
                 }
                 ctx.shadowBlur = 0;
 
-                // 玩家
                 const px = player.x - player.w / 2,
                     py = player.y - player.h / 2;
                 const s = scale;
@@ -1582,7 +1513,6 @@
 
                 ctx.shadowBlur = 0;
 
-                // HUD
                 ctx.fillStyle = 'rgba(0, 255, 200, 0.3)';
                 ctx.font = `${14 * s}px monospace`;
                 ctx.textAlign = 'left';
@@ -1673,11 +1603,13 @@
             // 事件绑定
             // =============================================
 
+            // 鼠标点击画布：开始/暂停/继续
             canvas.addEventListener('click', (e) => {
                 e.preventDefault();
                 handleGameControl();
             });
 
+            // 电脑键盘：WASD + 空格（完全不变）
             document.addEventListener('keydown', (e) => {
                 const key = e.key;
                 if (key === ' ' || key === 'Space') {
@@ -1695,6 +1627,7 @@
                     moveRight(); }
             });
 
+            // 手机虚拟键盘：方向键 + 暂停键
             const touchKeys = document.querySelectorAll('.touch-key');
             touchKeys.forEach(el => {
                 el.addEventListener('touchstart', (e) => {
