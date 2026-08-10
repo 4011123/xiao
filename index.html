@@ -429,7 +429,7 @@
 
         <canvas id="gameCanvas"></canvas>
 
-        <!-- ===== 手机虚拟键盘 ===== -->
+        <!-- ===== 手机虚拟键盘（已改成方向键） ===== -->
         <div class="touch-controls" id="touchControls">
             <div class="key-row">
                 <div class="touch-key" data-key="up">⬆</div>
@@ -444,7 +444,7 @@
         </div>
 
         <div class="bottom-bar">
-            <span class="hint-text" id="statusText">[ 点击/暂停键 开始 | 方向键移动 ]</span>
+            <span class="hint-text" id="statusText">[ 点击/空格 开始 | WASD移动 ]</span>
             <button class="btn" id="restartBtn">⟳ 重启</button>
         </div>
     </div>
@@ -459,12 +459,12 @@
             <div class="modal-section">
                 <h3>🎮 操作说明</h3>
                 <ul>
-                    <li><strong>鼠标左键 / 暂停键</strong>：开始 / 暂停 / 重新开始</li>
-                    <li><strong>⬆</strong>：向上跳一格</li>
-                    <li><strong>⬇</strong>：向下跳一格</li>
-                    <li><strong>⬅</strong>：向左闪避</li>
-                    <li><strong>➡</strong>：向右闪避</li>
-                    <li>💀 碰到障碍即结束，点击暂停键重新开始</li>
+                    <li><strong>鼠标左键 / 空格键</strong>：开始 / 暂停 / 重新开始</li>
+                    <li><strong>W</strong>：向上跳一格</li>
+                    <li><strong>S</strong>：向下跳一格</li>
+                    <li><strong>A</strong>：向左闪避</li>
+                    <li><strong>D</strong>：向右闪避</li>
+                    <li>💀 碰到障碍即结束，点击或按空格重新开始</li>
                 </ul>
             </div>
             <div class="modal-section">
@@ -889,10 +889,10 @@
             }
 
             function updateStatus() {
-                if (game.state === 'ready') statusText.textContent = '[ 点击或按暂停键开始 ]';
-                else if (game.state === 'playing' && game.paused) statusText.textContent = '[ ⏸️ 已暂停 | 点击或按暂停键继续 ]';
-                else if (game.state === 'playing') statusText.textContent = '[ 方向键移动 | 点击或按暂停键暂停 ]';
-                else if (game.state === 'dead') statusText.textContent = '[ 💀 点击或按暂停键重新开始 ]';
+                if (game.state === 'ready') statusText.textContent = '[ 点击或按空格开始 ]';
+                else if (game.state === 'playing' && game.paused) statusText.textContent = '[ ⏸️ 已暂停 | 点击或按空格继续 ]';
+                else if (game.state === 'playing') statusText.textContent = '[ WASD移动 | 点击或按空格暂停 ]';
+                else if (game.state === 'dead') statusText.textContent = '[ 💀 点击或按空格重新开始 ]';
             }
 
             function resetGame() {
@@ -994,7 +994,7 @@
             }
 
             // =============================================
-            // 方向键操作
+            // 方向键操作（手机用）
             // =============================================
 
             function moveUp() {
@@ -1539,10 +1539,10 @@
                 if (game.state === 'ready') {
                     ctx.fillStyle = 'rgba(0, 255, 200, 0.5)';
                     ctx.font = `bold ${28 * s}px monospace`;
-                    ctx.fillText('⚡ 点击或按暂停键开始', W / 2, H * 0.30);
+                    ctx.fillText('⚡ 点击或按空格开始', W / 2, H * 0.30);
                     ctx.fillStyle = 'rgba(255,255,255,0.12)';
                     ctx.font = `${14 * s}px monospace`;
-                    ctx.fillText('⬆上 ⬇下 ⬅左 ➡右', W / 2, H * 0.42);
+                    ctx.fillText('W上 S下 A左 D右', W / 2, H * 0.42);
                 }
 
                 if (game.state === 'playing' && game.paused) {
@@ -1551,7 +1551,7 @@
                     ctx.fillText('⏸️ 已暂停', W / 2, H * 0.30);
                     ctx.fillStyle = 'rgba(255,255,255,0.15)';
                     ctx.font = `${16 * s}px monospace`;
-                    ctx.fillText('点击或按暂停键继续', W / 2, H * 0.42);
+                    ctx.fillText('点击或按空格继续', W / 2, H * 0.42);
                 }
 
                 if (game.state === 'dead') {
@@ -1560,7 +1560,7 @@
                     ctx.fillText('💀 你没了', W / 2, H * 0.30);
                     ctx.fillStyle = 'rgba(255,255,255,0.2)';
                     ctx.font = `${16 * s}px monospace`;
-                    ctx.fillText('点击或按暂停键重新开始', W / 2, H * 0.44);
+                    ctx.fillText('点击或按空格重新开始', W / 2, H * 0.44);
                 }
 
                 ctx.textAlign = 'right';
@@ -1603,12 +1603,13 @@
             // 事件绑定
             // =============================================
 
+            // 鼠标点击画布：开始/暂停/继续
             canvas.addEventListener('click', (e) => {
                 e.preventDefault();
                 handleGameControl();
             });
 
-            // 电脑键盘：方向键 + 空格（暂停）
+            // 电脑键盘：WASD + 空格（完全不变）
             document.addEventListener('keydown', (e) => {
                 const key = e.key;
                 if (key === ' ' || key === 'Space') {
@@ -1616,17 +1617,17 @@
                     handleGameControl();
                     return;
                 }
-                if (key === 'ArrowUp') { e.preventDefault();
+                if (key === 'w' || key === 'W') { e.preventDefault();
                     moveUp(); }
-                if (key === 'ArrowDown') { e.preventDefault();
+                if (key === 's' || key === 'S') { e.preventDefault();
                     moveDown(); }
-                if (key === 'ArrowLeft') { e.preventDefault();
+                if (key === 'a' || key === 'A') { e.preventDefault();
                     moveLeft(); }
-                if (key === 'ArrowRight') { e.preventDefault();
+                if (key === 'd' || key === 'D') { e.preventDefault();
                     moveRight(); }
             });
 
-            // 手机虚拟键盘
+            // 手机虚拟键盘：方向键 + 暂停键
             const touchKeys = document.querySelectorAll('.touch-key');
             touchKeys.forEach(el => {
                 el.addEventListener('touchstart', (e) => {
