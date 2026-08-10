@@ -136,7 +136,7 @@
             transform: scale(0.94);
         }
 
-        /* ===== 手机虚拟键盘（上下左右 + 暂停） ===== */
+        /* ===== 手机虚拟键盘 ===== */
         .touch-controls {
             display: none;
             flex-shrink: 0;
@@ -429,22 +429,22 @@
 
         <canvas id="gameCanvas"></canvas>
 
-        <!-- ===== 手机虚拟键盘（上下左右 + 暂停） ===== -->
+        <!-- ===== 手机虚拟键盘 ===== -->
         <div class="touch-controls" id="touchControls">
             <div class="key-row">
                 <div class="touch-key" data-key="up">⬆</div>
-                <div class="touch-key pause-key" data-key="pause">⏸️ 暂停</div>
+                <div class="touch-key pause-key" data-key="pause">⏸️</div>
                 <div class="touch-key" data-key="down">⬇</div>
             </div>
             <div class="key-row">
                 <div class="touch-key" data-key="left">⬅</div>
-                <div class="touch-key pause-key" data-key="pause">⏸️ 开始</div>
+                <div class="touch-key pause-key" data-key="pause">⏸️ 开始/暂停</div>
                 <div class="touch-key" data-key="right">➡</div>
             </div>
         </div>
 
         <div class="bottom-bar">
-            <span class="hint-text" id="statusText">[ 点击/空格 开始 | 方向键移动 ]</span>
+            <span class="hint-text" id="statusText">[ 点击/暂停键 开始 | 方向键移动 ]</span>
             <button class="btn" id="restartBtn">⟳ 重启</button>
         </div>
     </div>
@@ -488,6 +488,10 @@
     </div>
 
     <script>
+        // =============================================
+        // 纯前端游戏（无腾讯云、无排行榜）
+        // =============================================
+
         (function() {
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
@@ -987,74 +991,10 @@
                 checkAchievements();
                 updateUI();
                 updateStatus();
-
-                // 排行榜上传
-                const name = prompt('🏆 上传分数！\n请输入你的名字：', '玩家');
-                if (name && game.score > 0) {
-                    uploadScore(name, game.score);
-                }
             }
 
             // =============================================
-            // 腾讯云开发排行榜功能
-            // =============================================
-
-            const app = cloudbase.init({
-                env: '你的环境ID' // ⚠️ 换成你的环境ID
-            });
-
-            function uploadScore(playerName, score) {
-                const db = app.database();
-                db.collection('ranking').add({
-                    player: playerName,
-                    score: score,
-                    time: new Date()
-                }).then(() => {
-                    alert(`✅ 分数已上传！\n玩家：${playerName}\n得分：${score}`);
-                }).catch(err => {
-                    alert('❌ 上传失败：' + err.message);
-                });
-            }
-
-            function getRanking() {
-                const db = app.database();
-                db.collection('ranking')
-                    .orderBy('score', 'desc')
-                    .limit(100)
-                    .get()
-                    .then(res => {
-                        showRankingPopup(res.data);
-                    }).catch(err => {
-                        alert('❌ 获取排行榜失败：' + err.message);
-                    });
-            }
-
-            function showRankingPopup(data) {
-                let html = '<h2>🏆 全国排行榜</h2><ul>';
-                if (data.length === 0) {
-                    html += '<li>暂无数据，快来挑战！</li>';
-                } else {
-                    data.forEach((item, index) => {
-                        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
-                        html += `<li>${medal} ${item.player} — ${item.score}分</li>`;
-                    });
-                }
-                html += '</ul><button onclick="this.parentElement.remove()">关闭</button>';
-
-                const popup = document.createElement('div');
-                popup.style.cssText = `
-                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-                        background: #1a2a3a; color: #fff; padding: 30px; border-radius: 16px;
-                        z-index: 9999; max-width: 400px; width: 90%;
-                        box-shadow: 0 0 60px rgba(0,0,0,0.8);
-                        font-family: 'Courier New', monospace;
-                    `;
-                popup.innerHTML = html;
-                document.body.appendChild(popup);
-            }
-
-            // =============================================
-            // 方向键操作（电脑键盘也支持）
+            // 方向键操作
             // =============================================
 
             function moveUp() {
@@ -1659,7 +1599,10 @@
                 container.innerHTML = html;
             }
 
-            // ---- 事件绑定 ----
+            // =============================================
+            // 事件绑定
+            // =============================================
+
             canvas.addEventListener('click', (e) => {
                 e.preventDefault();
                 handleGameControl();
@@ -1668,13 +1611,11 @@
             // 电脑键盘：方向键 + 空格（暂停）
             document.addEventListener('keydown', (e) => {
                 const key = e.key;
-                // 空格键 = 暂停/开始/重新开始
                 if (key === ' ' || key === 'Space') {
                     e.preventDefault();
                     handleGameControl();
                     return;
                 }
-                // 方向键
                 if (key === 'ArrowUp') { e.preventDefault();
                     moveUp(); }
                 if (key === 'ArrowDown') { e.preventDefault();
@@ -1685,7 +1626,7 @@
                     moveRight(); }
             });
 
-            // ---- 手机虚拟键盘 ----
+            // 手机虚拟键盘
             const touchKeys = document.querySelectorAll('.touch-key');
             touchKeys.forEach(el => {
                 el.addEventListener('touchstart', (e) => {
@@ -1757,23 +1698,6 @@
                     document.getElementById('achieveModal').classList.remove('active');
                 }
             });
-
-            // 排行榜按钮（浮窗）
-            const rankBtn = document.createElement('button');
-            rankBtn.innerHTML = '🏆';
-            rankBtn.style.cssText = `
-                    position: fixed; bottom: 70px; right: 14px;
-                    background: rgba(255, 200, 0, 0.15);
-                    border: 1px solid rgba(255, 200, 0, 0.2);
-                    border-radius: 50%;
-                    width: 50px; height: 50px;
-                    color: #feda7a; font-size: 24px;
-                    cursor: pointer; z-index: 50;
-                    font-family: 'Courier New', monospace;
-                    backdrop-filter: blur(4px);
-                `;
-            rankBtn.addEventListener('click', getRanking);
-            document.body.appendChild(rankBtn);
 
             window.addEventListener('resize', () => {
                 resize();
