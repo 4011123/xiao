@@ -69,19 +69,6 @@
         .score-item .highlight {
             color: #feda7a;
         }
-        .score-flash {
-            animation: scoreFlash 0.4s ease-out;
-        }
-        @keyframes scoreFlash {
-            0% {
-                color: #00ffc8;
-                transform: scale(1.4);
-            }
-            100% {
-                color: #00f5c8;
-                transform: scale(1);
-            }
-        }
         .rank-btn {
             background: rgba(0, 255, 200, 0.06);
             border: 1px solid rgba(0, 255, 200, 0.15);
@@ -96,6 +83,20 @@
         .rank-btn:active {
             transform: scale(0.94);
         }
+        .achievement-btn {
+            background: rgba(255, 200, 0, 0.06);
+            border: 1px solid rgba(255, 200, 0, 0.15);
+            color: #feda7a;
+            padding: 2px 12px;
+            border-radius: 16px;
+            font-size: clamp(10px, 1.5vh, 16px);
+            font-weight: 700;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        .achievement-btn:active {
+            transform: scale(0.94);
+        }
         canvas {
             flex: 1;
             width: 100%;
@@ -107,6 +108,7 @@
             min-height: 0;
             border: 1px solid rgba(0, 255, 200, 0.04);
             cursor: pointer;
+            transition: background 0.5s;
         }
         .bottom-bar {
             display: flex;
@@ -134,7 +136,6 @@
             transform: scale(0.94);
         }
 
-        /* ===== 手机虚拟键盘 ===== */
         .touch-controls {
             display: none;
             flex-shrink: 0;
@@ -196,7 +197,81 @@
             }
         }
 
-        /* 弹窗 */
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            10% {
+                transform: translateX(-10px);
+            }
+            30% {
+                transform: translateX(10px);
+            }
+            50% {
+                transform: translateX(-6px);
+            }
+            70% {
+                transform: translateX(6px);
+            }
+            90% {
+                transform: translateX(-3px);
+            }
+        }
+        .shaking {
+            animation: shake 0.4s ease-out;
+        }
+        @keyframes bossFlash {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            30% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        @keyframes fadeOut {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+            20% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideOut {
+            0% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
@@ -312,6 +387,50 @@
             border-radius: 4px;
         }
 
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .achieve-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: 0.2s;
+        }
+        .achieve-item.unlocked {
+            border-color: rgba(0, 255, 200, 0.2);
+            background: rgba(0, 255, 200, 0.04);
+        }
+        .achieve-item.locked {
+            opacity: 0.4;
+        }
+        .achieve-item .ach-icon {
+            font-size: 22px;
+        }
+        .achieve-item .ach-name {
+            color: #d0dcff;
+            font-size: clamp(12px, 1.4vh, 15px);
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+        .achieve-item .ach-desc {
+            color: #6a8aaa;
+            font-size: clamp(10px, 1.2vh, 13px);
+            font-family: 'Courier New', monospace;
+        }
+        .achieve-item .ach-status {
+            font-size: clamp(10px, 1.2vh, 13px);
+            font-weight: 700;
+        }
+        .achieve-item .ach-status.unlocked {
+            color: #00f5c8;
+        }
+        .achieve-item .ach-status.locked {
+            color: #5a5a7a;
+        }
+
         @media (max-width: 500px) {
             .game-wrapper {
                 padding: 6px 8px 8px;
@@ -331,6 +450,9 @@
             .modal-box {
                 padding: 16px 16px 20px;
             }
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -341,6 +463,7 @@
             <div class="top-left">
                 <div class="score-item">⚡ <span id="scoreDisplay">0</span></div>
                 <div class="score-item">🏁 <span class="highlight" id="bestDisplay">0</span></div>
+                <button class="achievement-btn" id="achieveBtn">🎒 <span id="achieveCount">0</span></button>
             </div>
             <div class="top-right">
                 <button class="rank-btn" id="rankBtn">🏅 <span id="rankDisplay">青铜</span></button>
@@ -349,7 +472,6 @@
 
         <canvas id="gameCanvas"></canvas>
 
-        <!-- ===== 手机虚拟键盘 ===== -->
         <div class="touch-controls" id="touchControls">
             <div class="key-row">
                 <div class="touch-key" data-key="w">W</div>
@@ -369,7 +491,7 @@
         </div>
     </div>
 
-    <!-- ===== 弹窗 ===== -->
+    <!-- 段位弹窗 -->
     <div class="modal-overlay" id="rankModal">
         <div class="modal-box">
             <div class="modal-header">
@@ -394,6 +516,19 @@
         </div>
     </div>
 
+    <!-- 成就背包弹窗 -->
+    <div class="modal-overlay" id="achieveModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>🎒 成就背包</h2>
+                <button class="modal-close" id="achieveClose">✕</button>
+            </div>
+            <div class="modal-section">
+                <div class="achievement-grid" id="achieveGrid"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         (function() {
             const canvas = document.getElementById('gameCanvas');
@@ -402,6 +537,7 @@
             const bestSpan = document.getElementById('bestDisplay');
             const rankSpan = document.getElementById('rankDisplay');
             const statusText = document.getElementById('statusText');
+            const achieveCount = document.getElementById('achieveCount');
 
             let W, H, scale;
 
@@ -426,7 +562,6 @@
                 }
             }
 
-            // ---- 段位 ----
             const RANKS = [
                 { name: '青铜', icon: '🥉', min: 0 },
                 { name: '白银', icon: '🥈', min: 10 },
@@ -443,7 +578,6 @@
                 return r;
             }
 
-            // ---- 4条跑道 ----
             const LANE_COUNT = 4;
             const LANE_NAMES = ['⬆ 顶层', '⬆ 上层', '⬇ 下层', '⬇ 底层'];
 
@@ -454,7 +588,6 @@
                 return startY + lane * step;
             }
 
-            // ---- 游戏状态 ----
             const GRAVITY = 0.4;
             const JUMP_FORCE = -6.5;
 
@@ -478,6 +611,8 @@
                 grounded: true,
                 lane: 1,
                 targetY: 0,
+                shield: false,
+                shieldTimer: 0,
             };
 
             let obstacles = [];
@@ -485,14 +620,303 @@
             const MIN_GAP = 70;
             const MAX_GAP = 130;
 
-            // ---- UI ----
+            let traps = [];
+            let trapTimer = 0;
+            const TRAP_INTERVAL = 120;
+
+            let powerups = [];
+            let powerupTimer = 0;
+            const POWERUP_INTERVAL = 600;
+
+            const THEMES = [
+                { name: '霓虹', colors: ['rgba(0,200,255,0.06)', 'rgba(100,200,255,0.06)', 'rgba(255,200,100,0.06)',
+                        'rgba(255,150,50,0.06)'
+                    ], bg: '#0f1a30' },
+                { name: '雪地', colors: ['rgba(200,220,255,0.10)', 'rgba(180,210,255,0.10)', 'rgba(160,200,255,0.10)',
+                        'rgba(140,190,255,0.10)'
+                    ], bg: '#1a2a3a' },
+                { name: '熔岩', colors: ['rgba(255,100,0,0.08)', 'rgba(255,80,0,0.08)', 'rgba(200,50,0,0.08)',
+                        'rgba(150,30,0,0.08)'
+                    ], bg: '#2a1a0a' },
+                { name: '森林', colors: ['rgba(0,200,100,0.08)', 'rgba(0,180,80,0.08)', 'rgba(0,160,60,0.08)',
+                        'rgba(0,140,40,0.08)'
+                    ], bg: '#0a1a0a' },
+            ];
+            let currentTheme = 0;
+
+            let bossActive = false;
+            let bossHitCount = 0;
+            let bossThreshold = 50;
+            let bossSpawned = false;
+
+            let combo = 0;
+            let maxCombo = 0;
+            let comboTimeout = null;
+
+            const ACHIEVEMENTS = [
+                { id: 'first_death', name: '💀 第一次死亡', desc: '死亡一次', unlocked: false },
+                { id: 'combo_10', name: '🔥 连击大师', desc: '连击达到10次', unlocked: false },
+                { id: 'combo_20', name: '⚡ 连击传说', desc: '连击达到20次', unlocked: false },
+                { id: 'score_50', name: '⭐ 得分50', desc: '累计得分达到50', unlocked: false },
+                { id: 'score_100', name: '🏆 得分100', desc: '累计得分达到100', unlocked: false },
+                { id: 'survive_30', name: '⏳ 生存30秒', desc: '连续存活30秒', unlocked: false },
+                { id: 'boss_kill', name: '👹 屠龙者', desc: '击败Boss', unlocked: false },
+                { id: 'shield_use', name: '🛡️ 护盾使者', desc: '拾取护盾道具', unlocked: false },
+                { id: 'trap_escape', name: '🌀 陷阱大师', desc: '成功触发陷阱并存活', unlocked: false },
+            ];
+
+            function loadAchievements() {
+                try {
+                    const saved = localStorage.getItem('achieveData');
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        ACHIEVEMENTS.forEach(a => {
+                            if (data[a.id] !== undefined) a.unlocked = data[a.id];
+                        });
+                    }
+                } catch (e) {}
+            }
+
+            function saveAchievements() {
+                try {
+                    const data = {};
+                    ACHIEVEMENTS.forEach(a => { data[a.id] = a.unlocked; });
+                    localStorage.setItem('achieveData', JSON.stringify(data));
+                } catch (e) {}
+            }
+
+            let totalScore = 0;
+            let surviveTime = 0;
+            let lastThemeScore = 0;
+            let shieldPickedUp = false;
+            let trapEscaped = false;
+
+            let audioCtx = null;
+
+            function playScoreSound() {
+                try {
+                    if (!audioCtx) audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.frequency.value = 880 + Math.random() * 440;
+                    osc.type = 'sine';
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                    osc.start(audioCtx.currentTime);
+                    osc.stop(audioCtx.currentTime + 0.15);
+                } catch (e) {}
+            }
+
+            function showAchievementNotification(ach) {
+                const notif = document.createElement('div');
+                notif.style.cssText = `
+                        position: fixed; top: 80px; right: 20px;
+                        background: linear-gradient(145deg, #1a2a4a, #0a1a2a);
+                        border: 1px solid #00f5c8;
+                        border-radius: 16px;
+                        padding: 16px 24px;
+                        color: #e0e8f0;
+                        font-family: 'Courier New', monospace;
+                        z-index: 999;
+                        box-shadow: 0 0 40px rgba(0,255,200,0.1);
+                        animation: slideIn 0.5s ease-out forwards;
+                        max-width: 300px;
+                    `;
+                notif.innerHTML = `
+                        <div style="font-size: 14px; color: #00f5c8;">🏆 成就解锁</div>
+                        <div style="font-size: 20px; font-weight: 700; margin: 4px 0;">${ach.name}</div>
+                        <div style="font-size: 12px; color: #6a8aaa;">${ach.desc}</div>
+                    `;
+                document.body.appendChild(notif);
+                setTimeout(() => {
+                    notif.style.animation = 'slideOut 0.5s ease-in forwards';
+                    setTimeout(() => notif.remove(), 600);
+                }, 4000);
+                updateAchieveUI();
+            }
+
+            function checkAchievements() {
+                let changed = false;
+                ACHIEVEMENTS.forEach(a => {
+                    if (a.unlocked) return;
+                    let unlock = false;
+                    if (a.id === 'first_death' && game.state === 'dead' && game.score > 0) unlock = true;
+                    if (a.id === 'combo_10' && combo >= 10) unlock = true;
+                    if (a.id === 'combo_20' && combo >= 20) unlock = true;
+                    if (a.id === 'score_50' && totalScore >= 50) unlock = true;
+                    if (a.id === 'score_100' && totalScore >= 100) unlock = true;
+                    if (a.id === 'survive_30' && surviveTime >= 30) unlock = true;
+                    if (a.id === 'boss_kill' && bossActive === false && bossSpawned === true) unlock = true;
+                    if (a.id === 'shield_use' && shieldPickedUp) unlock = true;
+                    if (a.id === 'trap_escape' && trapEscaped) unlock = true;
+                    if (unlock) {
+                        a.unlocked = true;
+                        changed = true;
+                        showAchievementNotification(a);
+                    }
+                });
+                if (changed) {
+                    saveAchievements();
+                    updateAchieveUI();
+                }
+            }
+
+            function updateAchieveUI() {
+                const count = ACHIEVEMENTS.filter(a => a.unlocked).length;
+                achieveCount.textContent = `${count}/${ACHIEVEMENTS.length}`;
+            }
+
+            function renderAchievements() {
+                const grid = document.getElementById('achieveGrid');
+                let html = '';
+                ACHIEVEMENTS.forEach(a => {
+                    const status = a.unlocked ? '✅ 已解锁' : '🔒 未解锁';
+                    const cls = a.unlocked ? 'unlocked' : 'locked';
+                    html += `
+                            <div class="achieve-item ${cls}">
+                                <div class="ach-icon">${a.name.split(' ')[0]}</div>
+                                <div class="ach-name">${a.name}</div>
+                                <div class="ach-desc">${a.desc}</div>
+                                <div class="ach-status ${a.unlocked ? 'unlocked' : 'locked'}">${status}</div>
+                            </div>
+                        `;
+                });
+                grid.innerHTML = html;
+            }
+
+            function resetCombo() {
+                combo = 0;
+                if (comboTimeout) {
+                    clearTimeout(comboTimeout);
+                    comboTimeout = null;
+                }
+            }
+
+            function addCombo() {
+                combo++;
+                if (combo > maxCombo) maxCombo = combo;
+                if (comboTimeout) {
+                    clearTimeout(comboTimeout);
+                    comboTimeout = null;
+                }
+                comboTimeout = setTimeout(() => {
+                    resetCombo();
+                }, 3000);
+                if (combo === 5 || combo === 10 || combo === 20 || combo === 50) {
+                    showComboNotification(combo);
+                }
+            }
+
+            function showComboNotification(count) {
+                const notif = document.createElement('div');
+                notif.style.cssText = `
+                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        color: #ffd966; font-size: 40px; font-weight: 900;
+                        font-family: 'Courier New', monospace;
+                        z-index: 999; pointer-events: none;
+                        text-shadow: 0 0 40px rgba(255,215,0,0.3);
+                        animation: bossFlash 0.8s ease-out forwards;
+                    `;
+                notif.textContent = `🔥 ${count} 连击！`;
+                document.body.appendChild(notif);
+                setTimeout(() => notif.remove(), 900);
+            }
+
+            function switchTheme() {
+                currentTheme = (currentTheme + 1) % THEMES.length;
+                const theme = THEMES[currentTheme];
+                canvas.style.background = theme.bg;
+                const tip = document.createElement('div');
+                tip.style.cssText = `
+                        position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+                        color: #00f5c8; font-size: 20px; font-weight: 700;
+                        font-family: 'Courier New', monospace;
+                        z-index: 999; pointer-events: none;
+                        background: rgba(0,0,0,0.6); padding: 8px 24px; border-radius: 12px;
+                        animation: fadeOut 2s ease-out forwards;
+                    `;
+                tip.textContent = `🎨 ${theme.name} 主题`;
+                document.body.appendChild(tip);
+                setTimeout(() => tip.remove(), 2200);
+            }
+
+            function showBossWarning() {
+                const warn = document.createElement('div');
+                warn.style.cssText = `
+                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                        color: #ff3a5a; font-size: 48px; font-weight: 900;
+                        font-family: 'Courier New', monospace;
+                        z-index: 999; pointer-events: none;
+                        text-shadow: 0 0 40px rgba(255,50,80,0.5);
+                        animation: bossFlash 0.8s ease-out forwards;
+                    `;
+                warn.textContent = '⚠️ BOSS 来袭！';
+                document.body.appendChild(warn);
+                setTimeout(() => warn.remove(), 900);
+            }
+
+            function spawnBoss() {
+                if (bossSpawned) return;
+                bossSpawned = true;
+                bossActive = true;
+                bossHitCount = 0;
+                const lane = Math.floor(Math.random() * LANE_COUNT);
+                const laneY = getLaneY(lane);
+                const boss = {
+                    x: W + 30,
+                    y: laneY - 30 * scale,
+                    w: 40 * scale,
+                    h: 60 * scale,
+                    lane: lane,
+                    type: 'boss',
+                    passed: false,
+                    hp: 3,
+                    moveTimer: 0,
+                    initY: laneY - 30 * scale,
+                };
+                obstacles.push(boss);
+                showBossWarning();
+            }
+
+            // ---- 生成陷阱 ----
+            function spawnTrap() {
+                const lane = Math.floor(Math.random() * LANE_COUNT);
+                const laneY = getLaneY(lane);
+                const type = Math.random() > 0.5 ? 'break' : 'lift';
+                traps.push({
+                    x: W + 30,
+                    y: laneY - 10 * scale,
+                    w: 34 * scale,
+                    h: 20 * scale,
+                    lane: lane,
+                    type: type,
+                    active: true,
+                    passed: false,
+                });
+            }
+
+            // ---- 生成护盾道具 ----
+            function spawnPowerup() {
+                const lane = Math.floor(Math.random() * LANE_COUNT);
+                const laneY = getLaneY(lane);
+                powerups.push({
+                    x: W + 30,
+                    y: laneY - 16 * scale,
+                    w: 22 * scale,
+                    h: 32 * scale,
+                    lane: lane,
+                    active: true,
+                    passed: false,
+                });
+            }
+
             function updateUI() {
                 scoreSpan.textContent = game.score;
                 bestSpan.textContent = game.best;
                 const r = getRank(game.score);
                 rankSpan.textContent = r.icon + ' ' + r.name;
-
-                // 得分闪烁提示
                 scoreSpan.style.transition = 'none';
                 scoreSpan.style.color = '#00ffc8';
                 scoreSpan.style.transform = 'scale(1.3)';
@@ -501,6 +925,7 @@
                     scoreSpan.style.color = '';
                     scoreSpan.style.transform = '';
                 }, 150);
+                updateAchieveUI();
             }
 
             function updateStatus() {
@@ -510,7 +935,6 @@
                 else if (game.state === 'dead') statusText.textContent = '[ 💀 点击或按空格重新开始 ]';
             }
 
-            // ---- 游戏逻辑 ----
             function resetGame() {
                 game.state = 'ready';
                 game.score = 0;
@@ -523,12 +947,29 @@
                 player.vy = 0;
                 player.grounded = true;
                 player.x = 70;
+                player.shield = false;
+                player.shieldTimer = 0;
                 const laneY = getLaneY(player.lane);
                 player.y = laneY - player.h / 2;
                 obstacles = [];
+                traps = [];
+                powerups = [];
                 spawnTimer = 0;
+                trapTimer = 0;
+                powerupTimer = 0;
+                bossActive = false;
+                bossSpawned = false;
+                bossHitCount = 0;
+                surviveTime = 0;
+                totalScore = 0;
+                lastThemeScore = 0;
+                shieldPickedUp = false;
+                trapEscaped = false;
+                resetCombo();
                 updateUI();
                 updateStatus();
+                loadAchievements();
+                updateAchieveUI();
             }
 
             function startGame() {
@@ -544,12 +985,29 @@
                     player.vy = 0;
                     player.grounded = true;
                     player.x = 70;
+                    player.shield = false;
+                    player.shieldTimer = 0;
                     const laneY = getLaneY(player.lane);
                     player.y = laneY - player.h / 2;
                     obstacles = [];
+                    traps = [];
+                    powerups = [];
                     spawnTimer = 0;
+                    trapTimer = 0;
+                    powerupTimer = 0;
+                    bossActive = false;
+                    bossSpawned = false;
+                    bossHitCount = 0;
+                    surviveTime = 0;
+                    totalScore = 0;
+                    lastThemeScore = 0;
+                    shieldPickedUp = false;
+                    trapEscaped = false;
+                    resetCombo();
                     updateUI();
                     updateStatus();
+                    loadAchievements();
+                    updateAchieveUI();
                 }
             }
 
@@ -567,11 +1025,14 @@
                     game.best = game.score;
                     localStorage.setItem('fourLaneWASD', String(game.best));
                 }
+                canvas.classList.add('shaking');
+                setTimeout(() => canvas.classList.remove('shaking'), 400);
+                resetCombo();
+                checkAchievements();
                 updateUI();
                 updateStatus();
             }
 
-            // ---- WASD 操作 ----
             function moveUp() {
                 if (game.state !== 'playing' || game.paused) return;
                 if (player.lane > 0) {
@@ -602,7 +1063,6 @@
                 if (player.x > W - 30) player.x = W - 30;
             }
 
-            // ---- 生成障碍 ----
             function spawnObstacle() {
                 const lane = Math.floor(Math.random() * LANE_COUNT);
                 const laneY = getLaneY(lane);
@@ -642,7 +1102,6 @@
                 obstacles.push(obs);
             }
 
-            // ---- 更新 ----
             function update() {
                 if (game.state !== 'playing' || game.paused) return;
                 game.frame++;
@@ -664,23 +1123,37 @@
                     player.grounded = true;
                 }
 
+                if (player.shield) {
+                    player.shieldTimer--;
+                    if (player.shieldTimer <= 0) {
+                        player.shield = false;
+                    }
+                }
+
                 const spawnGap = Math.max(30, (MIN_GAP + Math.random() * (MAX_GAP - MIN_GAP)) / (1 + game.difficulty * 0.05)) *
                     scale;
                 spawnTimer--;
                 if (spawnTimer <= 0) {
                     spawnObstacle();
-                    if (game.difficulty > 2 && Math.random() < 0.3) {
-                        spawnObstacle();
-                    }
-                    if (game.difficulty > 4 && Math.random() < 0.3) {
-                        spawnObstacle();
-                    }
+                    if (game.difficulty > 2 && Math.random() < 0.3) spawnObstacle();
+                    if (game.difficulty > 4 && Math.random() < 0.3) spawnObstacle();
                     spawnTimer = spawnGap / (game.speed * 0.6);
+                }
+
+                trapTimer--;
+                if (trapTimer <= 0) {
+                    spawnTrap();
+                    trapTimer = TRAP_INTERVAL / (game.speed * 0.5);
+                }
+
+                powerupTimer--;
+                if (powerupTimer <= 0) {
+                    spawnPowerup();
+                    powerupTimer = POWERUP_INTERVAL / (game.speed * 0.5);
                 }
 
                 for (let obs of obstacles) {
                     obs.x -= game.speed * scale * obs.speedMul;
-
                     if (obs.type === 'moving') {
                         obs.moveTimer += 0.04;
                         obs.y = obs.initY + Math.sin(obs.moveTimer) * obs.moveRange * 0.5;
@@ -692,32 +1165,154 @@
                 }
                 obstacles = obstacles.filter(o => o.x > -100);
 
-                // ===== 计分逻辑（严格版 + 闪烁） =====
+                for (let t of traps) {
+                    t.x -= game.speed * scale * 0.8;
+                }
+                traps = traps.filter(t => t.x > -80);
+
+                for (let p of powerups) {
+                    p.x -= game.speed * scale * 0.8;
+                }
+                powerups = powerups.filter(p => p.x > -80);
+
                 const px = player.x - player.w / 2;
+                const py = player.y - player.h / 2;
+
+                // ---- 碰撞检测：障碍 ----
                 for (let obs of obstacles) {
-                    // 碰撞检测（只检测当前跑道）
                     if (obs.lane === player.lane) {
-                        const py = player.y - player.h / 2;
                         if (px < obs.x + obs.w &&
                             px + player.w > obs.x &&
                             py < obs.y + obs.h &&
                             py + player.h > obs.y) {
+                            if (obs.type === 'boss') {
+                                obs.hp--;
+                                if (obs.hp <= 0) {
+                                    bossActive = false;
+                                    bossSpawned = false;
+                                    game.score += 5;
+                                    updateUI();
+                                    playScoreSound();
+                                    const msg = document.createElement('div');
+                                    msg.style.cssText = `
+                                            position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
+                                            color: #00f5c8; font-size: 32px; font-weight: 900;
+                                            font-family: 'Courier New', monospace;
+                                            z-index: 999; pointer-events: none;
+                                            animation: bossFlash 0.8s ease-out forwards;
+                                        `;
+                                    msg.textContent = '💥 Boss 击败！+5分';
+                                    document.body.appendChild(msg);
+                                    setTimeout(() => msg.remove(), 900);
+                                    obstacles = obstacles.filter(o => o !== obs);
+                                    checkAchievements();
+                                } else {
+                                    obs.w = 40 * scale + 10;
+                                }
+                                continue;
+                            }
+                            if (player.shield) {
+                                const shatter = document.createElement('div');
+                                shatter.style.cssText = `
+                                        position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                                        color: #00f5c8; font-size: 36px; font-weight: 900;
+                                        font-family: 'Courier New', monospace;
+                                        z-index: 999; pointer-events: none;
+                                        animation: bossFlash 0.5s ease-out forwards;
+                                    `;
+                                shatter.textContent = '🛡️ 护盾抵挡！';
+                                document.body.appendChild(shatter);
+                                setTimeout(() => shatter.remove(), 600);
+                                obstacles = obstacles.filter(o => o !== obs);
+                                continue;
+                            }
                             gameOver();
                             return;
                         }
                     }
-
-                    // 计分：障碍物完全通过玩家左侧（加10px缓冲），且未计分
                     if (!obs.passed && obs.x + obs.w < px - 10) {
                         obs.passed = true;
                         game.score++;
-                        updateUI(); // 这里会触发闪烁
-                        console.log('✅ 得分 +1，当前得分：' + game.score);
+                        totalScore++;
+                        addCombo();
+                        playScoreSound();
+                        updateUI();
+
+                        if (totalScore - lastThemeScore >= 30) {
+                            lastThemeScore = totalScore;
+                            switchTheme();
+                        }
+                        if (totalScore > 0 && totalScore % bossThreshold === 0 && !bossSpawned) {
+                            spawnBoss();
+                        }
+                        checkAchievements();
                     }
+                }
+
+                // ---- 陷阱检测 ----
+                for (let t of traps) {
+                    if (!t.active) continue;
+                    if (t.lane === player.lane) {
+                        if (px < t.x + t.w &&
+                            px + player.w > t.x &&
+                            py < t.y + t.h &&
+                            py + player.h > t.y) {
+                            t.active = false;
+                            if (t.type === 'break') {
+                                if (player.lane < LANE_COUNT - 1) {
+                                    player.lane++;
+                                    player.vy = -2 * scale;
+                                    player.grounded = false;
+                                    trapEscaped = true;
+                                    checkAchievements();
+                                }
+                            } else if (t.type === 'lift') {
+                                if (player.lane > 0) {
+                                    player.lane--;
+                                    player.vy = -2 * scale;
+                                    player.grounded = false;
+                                    trapEscaped = true;
+                                    checkAchievements();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // ---- 护盾道具拾取 ----
+                for (let p of powerups) {
+                    if (!p.active) continue;
+                    if (p.lane === player.lane) {
+                        if (px < p.x + p.w &&
+                            px + player.w > p.x &&
+                            py < p.y + p.h &&
+                            py + player.h > p.y) {
+                            p.active = false;
+                            player.shield = true;
+                            player.shieldTimer = 120;
+                            shieldPickedUp = true;
+                            checkAchievements();
+                            const msg = document.createElement('div');
+                            msg.style.cssText = `
+                                    position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
+                                    color: #00f5c8; font-size: 32px; font-weight: 900;
+                                    font-family: 'Courier New', monospace;
+                                    z-index: 999; pointer-events: none;
+                                    animation: bossFlash 0.6s ease-out forwards;
+                                `;
+                            msg.textContent = '🛡️ 护盾！';
+                            document.body.appendChild(msg);
+                            setTimeout(() => msg.remove(), 700);
+                        }
+                    }
+                }
+
+                surviveTime++;
+                if (surviveTime % 30 === 0) {
+                    checkAchievements();
                 }
             }
 
-            // ---- 绘图 ----
             function draw() {
                 ctx.clearRect(0, 0, W, H);
 
@@ -727,9 +1322,8 @@
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, W, H);
 
-                const laneColors = ['rgba(0, 200, 255, 0.06)', 'rgba(100, 200, 255, 0.06)',
-                    'rgba(255, 200, 100, 0.06)', 'rgba(255, 150, 50, 0.06)'
-                ];
+                const theme = THEMES[currentTheme];
+                const laneColors = theme.colors;
                 for (let i = 0; i < LANE_COUNT; i++) {
                     const y = getLaneY(i);
                     ctx.fillStyle = laneColors[i];
@@ -745,13 +1339,116 @@
                 ctx.fillStyle = 'rgba(0, 255, 200, 0.05)';
                 ctx.fillRect(0, hlY - 22 * scale, W, 44 * scale);
 
+                // ---- 绘制陷阱（完全不同风格） ----
+                for (let t of traps) {
+                    if (!t.active) continue;
+                    if (t.type === 'break') {
+                        // 🔴 断路陷阱：红色锯齿+底部XXX
+                        ctx.shadowColor = 'rgba(255,50,50,0.4)';
+                        ctx.shadowBlur = 25 * scale;
+                        // 锯齿主体
+                        ctx.fillStyle = '#cc2233';
+                        ctx.beginPath();
+                        const segs = 6;
+                        for (let i = 0; i < segs; i++) {
+                            const x1 = t.x + (i / segs) * t.w;
+                            const x2 = t.x + ((i + 0.5) / segs) * t.w;
+                            const x3 = t.x + ((i + 1) / segs) * t.w;
+                            const y1 = t.y + t.h;
+                            const y2 = t.y;
+                            const y3 = t.y + t.h;
+                            if (i === 0) ctx.moveTo(x1, y1);
+                            ctx.lineTo(x2, y2);
+                            ctx.lineTo(x3, y1);
+                        }
+                        ctx.closePath();
+                        ctx.fill();
+                        // 底部断裂标记 XXX
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = '#ff6666';
+                        ctx.font = `bold ${12 * scale}px monospace`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'bottom';
+                        ctx.fillText('✕ ✕ ✕', t.x + t.w / 2, t.y + t.h - 2 * scale);
+                        // 红色边框
+                        ctx.strokeStyle = 'rgba(255,80,80,0.5)';
+                        ctx.lineWidth = 2 * scale;
+                        ctx.strokeRect(t.x, t.y, t.w, t.h);
+                    } else {
+                        // 🟢 升降陷阱：绿色+三个向上箭头
+                        ctx.shadowColor = 'rgba(0,255,100,0.4)';
+                        ctx.shadowBlur = 25 * scale;
+                        ctx.fillStyle = '#22aa44';
+                        ctx.beginPath();
+                        roundRect(ctx, t.x, t.y, t.w, t.h, 6 * scale);
+                        ctx.fill();
+                        // 三个向上箭头 ↑ ↑ ↑
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = '#88ff88';
+                        ctx.font = `bold ${16 * scale}px monospace`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('↑ ↑ ↑', t.x + t.w / 2, t.y + t.h / 2 + 2 * scale);
+                        // 绿色边框发光
+                        ctx.strokeStyle = 'rgba(0,255,100,0.4)';
+                        ctx.lineWidth = 2 * scale;
+                        ctx.strokeRect(t.x, t.y, t.w, t.h);
+                    }
+                }
+
+                // ---- 绘制护盾道具（蓝色发光球体） ----
+                for (let p of powerups) {
+                    if (!p.active) continue;
+                    const pulse = 0.8 + 0.2 * Math.sin(game.frame * 0.05);
+                    ctx.shadowColor = 'rgba(0, 200, 255, 0.6)';
+                    ctx.shadowBlur = 40 * scale * pulse;
+                    // 外发光圈
+                    ctx.beginPath();
+                    ctx.arc(p.x + p.w / 2, p.y + p.h / 2, 16 * scale * pulse, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(0, 200, 255, 0.15)';
+                    ctx.fill();
+                    // 核心球体
+                    ctx.shadowBlur = 30 * scale * pulse;
+                    ctx.beginPath();
+                    ctx.arc(p.x + p.w / 2, p.y + p.h / 2, 12 * scale * pulse, 0, Math.PI * 2);
+                    ctx.fillStyle = '#00ccff';
+                    ctx.fill();
+                    // 盾牌图标
+                    ctx.shadowBlur = 0;
+                    ctx.font = `${18 * scale}px monospace`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🛡️', p.x + p.w / 2, p.y + p.h / 2 + 1 * scale);
+                    // 高光
+                    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                    ctx.beginPath();
+                    ctx.arc(p.x + p.w / 2 - 4 * scale, p.y + p.h / 2 - 6 * scale, 3 * scale, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                // ---- 绘制障碍 ----
                 for (let obs of obstacles) {
                     const isDanger = (obs.type === 'spike' || obs.type === 'moving' || obs.type === 'swing');
-                    const color = isDanger ? '#ff3a5a' : '#ffaa00';
-                    ctx.shadowColor = isDanger ? 'rgba(255, 50, 80, 0.25)' : 'rgba(255, 200, 0, 0.2)';
-                    ctx.shadowBlur = 18 * scale;
+                    const isBoss = (obs.type === 'boss');
+                    const color = isBoss ? '#ff00aa' : (isDanger ? '#ff3a5a' : '#ffaa00');
+                    ctx.shadowColor = isBoss ? 'rgba(255,0,170,0.4)' : (isDanger ? 'rgba(255,50,80,0.25)' :
+                    'rgba(255,200,0,0.2)');
+                    ctx.shadowBlur = isBoss ? 35 * scale : 18 * scale;
 
-                    if (obs.type === 'spike') {
+                    if (isBoss) {
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        roundRect(ctx, obs.x, obs.y, obs.w, obs.h, 6 * scale);
+                        ctx.fill();
+                        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+                        ctx.beginPath();
+                        roundRect(ctx, obs.x + 4 * scale, obs.y + 4 * scale, obs.w - 8 * scale, 8 * scale, 4 * scale);
+                        ctx.fill();
+                        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                        ctx.font = `${12 * scale}px monospace`;
+                        ctx.textAlign = 'center';
+                        ctx.fillText(`❤️ ${obs.hp}`, obs.x + obs.w / 2, obs.y - 10 * scale);
+                    } else if (obs.type === 'spike') {
                         ctx.fillStyle = color;
                         ctx.beginPath();
                         ctx.moveTo(obs.x, obs.y + obs.h);
@@ -768,7 +1465,7 @@
                         ctx.lineTo(obs.x, obs.y + obs.h / 2);
                         ctx.closePath();
                         ctx.fill();
-                        ctx.fillStyle = 'rgba(255, 200, 0, 0.08)';
+                        ctx.fillStyle = 'rgba(255,200,0,0.08)';
                         ctx.beginPath();
                         ctx.arc(obs.x + obs.w / 2, obs.y + obs.h / 2, obs.w * 0.8, 0, Math.PI * 2);
                         ctx.fill();
@@ -786,15 +1483,25 @@
                 }
                 ctx.shadowBlur = 0;
 
+                // ---- 玩家 ----
                 const px = player.x - player.w / 2,
                     py = player.y - player.h / 2;
                 const s = scale;
-                const colors = ['#3a8abd', '#4a9add', '#d4a24e', '#e8b84a'];
-                const color = colors[player.lane] || '#3a8abd';
+
+                if (player.shield) {
+                    ctx.shadowColor = 'rgba(0, 255, 200, 0.6)';
+                    ctx.shadowBlur = 40 * s;
+                    ctx.strokeStyle = 'rgba(0, 255, 200, 0.3)';
+                    ctx.lineWidth = 4 * s;
+                    ctx.beginPath();
+                    ctx.arc(player.x, player.y, 22 * s, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                }
 
                 ctx.shadowColor = 'rgba(0, 200, 255, 0.15)';
                 ctx.shadowBlur = 20 * s;
-                ctx.fillStyle = color;
+                ctx.fillStyle = '#3a8abd';
                 ctx.beginPath();
                 roundRect(ctx, px, py, player.w, player.h, 4 * s);
                 ctx.fill();
@@ -806,7 +1513,7 @@
                 ctx.fill();
 
                 ctx.shadowBlur = 12 * s;
-                ctx.fillStyle = (player.lane < 2) ? '#4a9add' : '#e8b84a';
+                ctx.fillStyle = '#4a9add';
                 ctx.beginPath();
                 ctx.arc(px + player.w / 2, py - 2 * s, 13 * s, 0, Math.PI * 2);
                 ctx.fill();
@@ -834,7 +1541,7 @@
                 ctx.stroke();
 
                 const legSwing = player.grounded ? Math.sin(game.frame * 0.1) * 2 * s : 4 * s;
-                ctx.fillStyle = (player.lane < 2) ? '#2a6a8a' : '#b08030';
+                ctx.fillStyle = '#2a6a8a';
                 ctx.beginPath();
                 roundRect(ctx, px + 2 * s, py + player.h - 4 * s, 5 * s, 6 * s + legSwing, 2 * s);
                 ctx.fill();
@@ -842,7 +1549,7 @@
                 roundRect(ctx, px + player.w - 7 * s, py + player.h - 4 * s, 5 * s, 6 * s - legSwing, 2 * s);
                 ctx.fill();
 
-                ctx.strokeStyle = (player.lane < 2) ? '#3a8abd' : '#d4a24e';
+                ctx.strokeStyle = '#3a8abd';
                 ctx.lineWidth = 4 * s;
                 ctx.lineCap = 'round';
                 ctx.beginPath();
@@ -851,6 +1558,28 @@
                 ctx.stroke();
 
                 ctx.shadowBlur = 0;
+
+                // ---- HUD ----
+                ctx.fillStyle = 'rgba(0, 255, 200, 0.3)';
+                ctx.font = `${14 * s}px monospace`;
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText(`跑道: ${player.lane + 1}/${LANE_COUNT}`, 10 * s, 30 * s);
+
+                if (player.shield) {
+                    ctx.fillStyle = 'rgba(0, 255, 200, 0.5)';
+                    ctx.font = `${14 * s}px monospace`;
+                    ctx.textAlign = 'right';
+                    ctx.textBaseline = 'top';
+                    ctx.fillText('🛡️ ' + Math.ceil(player.shieldTimer / 60) + 's', W - 10, 8);
+                }
+
+                // 图例（右下角）
+                ctx.fillStyle = 'rgba(255,255,255,0.15)';
+                ctx.font = `${11 * s}px monospace`;
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'bottom';
+                ctx.fillText('🔴断路 ⬇  🟢升降 ⬆  🔵护盾', W - 10, H - 10 * s);
 
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
@@ -899,27 +1628,25 @@
                 ctx.arcTo(x, y, x + w, y, r);
             }
 
-            // ---- 弹窗 ----
-            function renderModal() {
+            function renderRankModal() {
                 const container = document.getElementById('rankList');
                 const current = getRank(game.score);
                 let html = '';
                 for (let r of RANKS) {
                     const isCurrent = r.name === current.name;
                     html += `
-                        <div class="rank-item ${isCurrent ? 'current' : ''}">
-                            <div class="rank-left">
-                                <span class="rank-icon">${r.icon}</span>
-                                <span class="rank-name">${r.name}</span>
+                            <div class="rank-item ${isCurrent ? 'current' : ''}">
+                                <div class="rank-left">
+                                    <span class="rank-icon">${r.icon}</span>
+                                    <span class="rank-name">${r.name}</span>
+                                </div>
+                                <span class="rank-score">≥ ${r.min} 分</span>
                             </div>
-                            <span class="rank-score">≥ ${r.min} 分</span>
-                        </div>
-                    `;
+                        `;
                 }
                 container.innerHTML = html;
             }
 
-            // ---- 主控函数 ----
             function handleGameControl() {
                 if (game.state === 'ready' || game.state === 'dead') {
                     startGame();
@@ -928,7 +1655,6 @@
                 }
             }
 
-            // ---- 事件绑定 ----
             canvas.addEventListener('click', (e) => {
                 e.preventDefault();
                 handleGameControl();
@@ -951,7 +1677,6 @@
                     moveRight(); }
             });
 
-            // ---- 手机虚拟键盘 ----
             const touchKeys = document.querySelectorAll('.touch-key');
             touchKeys.forEach(el => {
                 el.addEventListener('touchstart', (e) => {
@@ -999,7 +1724,7 @@
             document.getElementById('restartBtn').addEventListener('click', resetGame);
 
             document.getElementById('rankBtn').addEventListener('click', () => {
-                renderModal();
+                renderRankModal();
                 document.getElementById('rankModal').classList.add('active');
             });
             document.getElementById('modalClose').addEventListener('click', () => {
@@ -1011,15 +1736,29 @@
                 }
             });
 
+            document.getElementById('achieveBtn').addEventListener('click', () => {
+                renderAchievements();
+                document.getElementById('achieveModal').classList.add('active');
+            });
+            document.getElementById('achieveClose').addEventListener('click', () => {
+                document.getElementById('achieveModal').classList.remove('active');
+            });
+            document.getElementById('achieveModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    document.getElementById('achieveModal').classList.remove('active');
+                }
+            });
+
             window.addEventListener('resize', () => {
                 resize();
                 const laneY = getLaneY(player.lane);
                 player.y = laneY - player.h / 2;
             });
 
-            // ---- 启动 ----
+            loadAchievements();
             resize();
             resetGame();
+            updateAchieveUI();
 
             function loop() {
                 update();
